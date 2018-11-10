@@ -44,9 +44,7 @@ public class SearchWordDao {
 			else br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
 			String inputLine;
             StringBuffer response = new StringBuffer();
-            while ((inputLine = br.readLine()) != null) {
-                response.append(inputLine);
-            }
+            while ((inputLine = br.readLine()) != null)	response.append(inputLine);
             br.close();
             searchedData = response.toString();
 		} catch (Exception e) {
@@ -99,10 +97,9 @@ public class SearchWordDao {
 			else br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
 			String inputLine;
             StringBuffer response = new StringBuffer();
-            while ((inputLine = br.readLine()) != null) {
-                response.append(inputLine);
-            }
+            while ((inputLine = br.readLine()) != null)	response.append(inputLine);
             br.close();
+            
             searchedData = response.toString();
 		} catch (Exception e) {
 			System.out.println(e);
@@ -134,7 +131,9 @@ public class SearchWordDao {
 			e.printStackTrace();
 		}
 		
-		for (Element item : items)	relatedSearches += "\r└ "+item.text();
+		if(items.text().isEmpty())	relatedSearches = "\r없음";
+		else for (Element item : items)	relatedSearches += "\r└ "+item.text();
+		
 		return relatedSearches;
 	}
 }
