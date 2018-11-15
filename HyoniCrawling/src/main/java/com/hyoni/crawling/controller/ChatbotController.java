@@ -48,6 +48,8 @@ public class ChatbotController {
 			resContent += "\rEX.!날씨, !날씨 서울, !날씨 부산";
 			resContent += "\r\r2. 키워드 검색";
 			resContent += "\rEX. !검색 심심이";
+			resContent += "\r\r3. 로또번호 추출기";
+			resContent += "\rEX. !로또번호";
 		}
 		else if(reqContent.startsWith("!날씨")) {
 			if(reqContent.contains("서울"))	resContent = "현재 서울은 "+weatherService.getCertainWeather("seoul")+"입니다. :)";
