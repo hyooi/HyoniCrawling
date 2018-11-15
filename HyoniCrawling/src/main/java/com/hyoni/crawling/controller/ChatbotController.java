@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hyoni.crawling.service.OtherUtilService;
 import com.hyoni.crawling.service.SearchWordService;
 import com.hyoni.crawling.service.WeatherService;
 import com.hyoni.crawling.vo.ChatRequestVO;
@@ -24,6 +25,9 @@ public class ChatbotController {
 	
 	@Autowired
 	private SearchWordService searchWordService;
+	
+	@Autowired
+	private OtherUtilService otherUtilService;
 	
 	@RequestMapping(value = "/keyboard", method = RequestMethod.GET)
 	public KeyboardVO keyboard() {
@@ -73,7 +77,12 @@ public class ChatbotController {
 			resContent += "\r\r■ 연관키워드";
 			resContent += searchWordService.getRelatedSearches(searchWord);
 
-		}else {
+		}else if(reqContent.startsWith("!로또번호")){
+			resContent = req.getUser_key()+"님께서 뽑으신 로또번호입니다.";
+			resContent += otherUtilService.getLottoNumbers();
+			resContent += "\r\r행운이 있기를 바랍니다. 뿅뿅!! ";
+		}
+		else {
 			resContent = "이해가 가지 않습니다.";
 			resContent += "\r[도움말]을 입력하시면, 사용법을 확인하실 수 있어요~";
 		}
