@@ -71,8 +71,7 @@ public class ChatbotController {
 			DecimalFormat commas = new DecimalFormat("#,###");
 			
 			resContent = "■ 키워드 : "+searchWord;
-			resContent += "\r└ 피　씨 : ? 회";
-			resContent += "\r└ 모바일 : ? 회";
+			resContent += searchWordService.getAmountSearches(searchWord.replaceAll("\\p{Z}", ""));
 			resContent += "\r└ 합　계 : "+commas.format(searchWordService.getWebDocsCnt(searchWord))+" 회";
 			resContent += "\r└ 블로그 : "+commas.format(resultDataFromBlog.get("blogTotal"))+" 건";
 			resContent += "\r└ 순　위 : "+resultDataFromBlog.get("blogLinks");

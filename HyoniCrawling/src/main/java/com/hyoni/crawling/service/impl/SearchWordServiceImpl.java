@@ -1,5 +1,6 @@
 package com.hyoni.crawling.service.impl;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,15 @@ public class SearchWordServiceImpl implements SearchWordService {
 	@Override
 	public String getRelatedSearches(String searchWord) {
 		return searchWordDao.getRelatedSearches(searchWord);
+	}
+
+	@Override
+	public String getAmountSearches(String searchWord) throws Exception {
+		HashMap<String, Integer> map = searchWordDao.getAmountSearches(searchWord);
+		DecimalFormat commas = new DecimalFormat("#,###");
+		String resContent = "\r└ 피　씨 : "+commas.format(map.get("monthlyPcQcCnt"))+" 회";
+		resContent += "\r└ 모바일 : "+commas.format(map.get("monthlyMobileQcCnt"))+" 회";
+		
+		return resContent;
 	}
 }
