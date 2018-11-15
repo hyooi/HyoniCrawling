@@ -60,18 +60,18 @@ public class ChatbotController {
 			else if(reqContent.contains("제주"))	resContent = "현재 제주는 "+weatherService.getCertainWeather("jeju")+"입니다. :)";
 			else	resContent = "전국 날씨를 알려드려요~"+weatherService.getWeathers();
 		}else if(reqContent.startsWith("!검색")) {
-			String[] searchWord = reqContent.split(" ");
-			HashMap<String, Object> resultDataFromBlog = searchWordService.getSearchWordFromBlog(searchWord[1]);
+			String searchWord = reqContent.substring(3).trim();
+			HashMap<String, Object> resultDataFromBlog = searchWordService.getSearchWordFromBlog(searchWord);
 			DecimalFormat commas = new DecimalFormat("#,###");
 			
-			resContent = "■ 키워드 : "+searchWord[1];
+			resContent = "■ 키워드 : "+searchWord;
 			resContent += "\r└ 피　씨 : ? 회";
 			resContent += "\r└ 모바일 : ? 회";
-			resContent += "\r└ 합　계 : "+commas.format(searchWordService.getWebDocsCnt(searchWord[1]))+" 회";
+			resContent += "\r└ 합　계 : "+commas.format(searchWordService.getWebDocsCnt(searchWord))+" 회";
 			resContent += "\r└ 블로그 : "+commas.format(resultDataFromBlog.get("blogTotal"))+" 건";
 			resContent += "\r└ 순　위 : "+resultDataFromBlog.get("blogLinks");
 			resContent += "\r\r■ 연관키워드";
-			resContent += searchWordService.getRelatedSearches(searchWord[1]);
+			resContent += searchWordService.getRelatedSearches(searchWord);
 
 		}else {
 			resContent = "이해가 가지 않습니다.";
