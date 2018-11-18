@@ -32,10 +32,11 @@ public class SearchWordServiceImpl implements SearchWordService {
 
 	@Override
 	public String getAmountSearches(String searchWord) throws Exception {
-		HashMap<String, Integer> map = searchWordDao.getAmountSearches(searchWord);
 		DecimalFormat commas = new DecimalFormat("#,###");
-		String resContent = "\r└ 피　씨 : "+commas.format(map.get("monthlyPcQcCnt"))+" 회";
-		resContent += "\r└ 모바일 : "+commas.format(map.get("monthlyMobileQcCnt"))+" 회";
+		HashMap<String, Object> map = searchWordDao.getAmountSearches(searchWord);
+		
+		String resContent = "\r└ 피　씨 : "+commas.format(map.get("monthlyPcQcCnt").toString().startsWith("<")? 10: map.get("monthlyPcQcCnt"))+" 회";
+		resContent += "\r└ 모바일 : "+commas.format(map.get("monthlyMobileQcCnt").toString().startsWith("<")? 10: map.get("monthlyMobileQcCnt"))+" 회";
 		
 		return resContent;
 	}
