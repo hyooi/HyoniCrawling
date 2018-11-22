@@ -17,6 +17,7 @@ public class WeatherServiceImpl implements WeatherService {
 	public String getWeathers() {
 		String weathers = "";
 		try {
+			weathers += "전국 날씨를 알려드려요~";
 			weathers += "\r서울 : "+getConvertCondition(weatherDao.getCertainWeather("seoul"));
 			weathers += "\r인천 : "+getConvertCondition(weatherDao.getCertainWeather("incheon"));
 			weathers += "\r춘천 : "+getConvertCondition(weatherDao.getCertainWeather("chuncheon"));

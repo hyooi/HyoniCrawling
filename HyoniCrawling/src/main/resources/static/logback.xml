@@ -6,11 +6,6 @@
 		</encoder>
 	</appender>
 	
-	<logger name="com.hyoni.crawling.controller" additivity="false">
-		<level value="INFO"/>
-		<appender-ref ref="consoleAppender"/>
-	</logger>
-	
 	<root level="INFO">
 		<appender-ref ref="consoleAppender"/>
 	</root>

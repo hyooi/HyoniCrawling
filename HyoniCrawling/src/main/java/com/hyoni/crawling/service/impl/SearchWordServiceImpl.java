@@ -44,4 +44,16 @@ public class SearchWordServiceImpl implements SearchWordService {
 		
 		return resContent;
 	}
+
+	@Override
+	public String getSearchRandomKeyword() {
+		/*
+		 * https://manage.searchad.naver.com/keywordstool?format=json&siteId=&mobileSiteId=&hintKeywords=&includeHintKeywords=0&showDetail=1&biztpId=&mobileBiztpId=&month=12&event=&keyword=
+		 * 1. 네이버 광고시스템에서 월간 데이터 불러오기
+		 * 2. PC+MOBILE 검색량 합계 2천 이상인 경우 루프돌면서 검색API태울 것
+		 * 3. 블로그 문서수 300이하의 키워드 찾으면 RETURN
+		 * 4. 시간 오래걸리는 작업이니 배치성 작업으로 처리해두고(30~1시간), 요청하면 RETURN해주는 방식으로 처리
+		 * */
+		return "랜덤키워드";
+	}
 }

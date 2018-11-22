@@ -46,32 +46,15 @@ public class ChatbotController {
 		logger.info("[MESSAGE] USER : " + req.getUser_key() + " | REQUEST : " + reqContent);
 		
 		if ((reqContent.contains("안녕"))||(reqContent.contains("하이")||(reqContent.contains("hi")))){
-			resContent = "안녕하세요~ :)";
+			resContent = "안녕하세요 :)";
 		}else if(reqContent.startsWith("!도움말")){
-			resContent = "[도움말]";
-			resContent += "\r1. 날씨";
-			resContent += "\rEX.!날씨, !날씨 서울, !날씨 부산";
-			resContent += "\r\r2. 키워드 검색";
-			resContent += "\rEX.!검색 심심이";
-			resContent += "\r\r3. 로또번호 추출기";
-			resContent += "\rEX.!로또번호";
+			resContent = otherUtilService.getHelpMessage();
 		}else if(reqContent.startsWith("!날씨")) {
-			if(reqContent.contains("서울"))	resContent = "현재 서울은 "+weatherService.getCertainWeather("seoul")+"입니다. :)";
-			else if(reqContent.contains("인천"))	resContent = "현재 인천은 "+weatherService.getCertainWeather("incheon")+"입니다. :)";
-			else if(reqContent.contains("춘천"))	resContent = "현재 춘천은 "+weatherService.getCertainWeather("chuncheon")+"입니다. :)";
-			else if(reqContent.contains("강릉"))	resContent = "현재 강릉은 "+weatherService.getCertainWeather("gangrung")+"입니다. :)";
-			else if(reqContent.contains("청주"))	resContent = "현재 청주는 "+weatherService.getCertainWeather("chungju")+"입니다. :)";
-			else if(reqContent.contains("대전"))	resContent = "현재 대전은 "+weatherService.getCertainWeather("daejeon")+"입니다. :)";
-			else if(reqContent.contains("전주"))	resContent = "현재 전주는 "+weatherService.getCertainWeather("jeonju")+"입니다. :)";
-			else if(reqContent.contains("광주"))	resContent = "현재 광주는 "+weatherService.getCertainWeather("gwangju")+"입니다. :)";
-			else if(reqContent.contains("대구"))	resContent = "현재 대구는 "+weatherService.getCertainWeather("daegu")+"입니다. :)";
-			else if(reqContent.contains("울산"))	resContent = "현재 울산은 "+weatherService.getCertainWeather("ulsan")+"입니다. :)";
-			else if(reqContent.contains("부산"))	resContent = "현재 부산은 "+weatherService.getCertainWeather("busan")+"입니다. :)";
-			else if(reqContent.contains("제주"))	resContent = "현재 제주는 "+weatherService.getCertainWeather("jeju")+"입니다. :)";
-			else	resContent = "전국 날씨를 알려드려요~"+weatherService.getWeathers();
+			resContent = weatherService.getWeathers();
 		}else if(reqContent.startsWith("!검색")) {
 			String searchWord = reqContent.substring(3).trim();
 			if(searchWord.equals(""))	return new ChatResponseVO("검색어를 입력해주세요.");
+			
 			HashMap<String, Object> resultDataFromBlog = searchWordService.getSearchWordFromBlog(searchWord);
 			DecimalFormat commas = new DecimalFormat("#,###");
 			
@@ -82,14 +65,12 @@ public class ChatbotController {
 			resContent += "\r└ 순　위 : "+resultDataFromBlog.get("blogLinks");
 			resContent += "\r\r■ 연관키워드";
 			resContent += searchWordService.getRelatedSearches(searchWord);
-
 		}else if(reqContent.startsWith("!로또번호")){
-			resContent = req.getUser_key()+"님께서 뽑으신 로또번호입니다.";
-			resContent += otherUtilService.getLottoNumbers();
-			resContent += "\r\r행운이 있기를 바랍니다. 뿅뿅!! ";
-		}else {
-			resContent = "안녕하세요. 심심이입니다.";
-			resContent += "\r명령어는 '!도움말'을 외쳐주세요.";
+			resContent = otherUtilService.getLottoNumbers(req.getUser_key());
+		}else if(reqContent.equals("!랜덤키워드")){
+			resContent = searchWordService.getSearchRandomKeyword();
+		}else{
+			resContent = otherUtilService.getOtherRequest();
 		}
 		
 		return new ChatResponseVO(resContent);
