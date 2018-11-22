@@ -11,7 +11,6 @@ import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.Test;
 import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -26,7 +25,7 @@ public class WeatherDao {
 		 * 서울 : 60, 127
 		 * 인천 : 55, 124
 		 * 춘천 : 73, 134
-		 * 강릉 : 92, 131
+		 * 강릉 : 92, 131ㅒ
 		 * 청주 : 69, 107
 		 * 대전 : 67, 100
 		 * 전주 : 63, 89
@@ -78,7 +77,6 @@ public class WeatherDao {
 		return regionKey;
 	}
 	
-	@Test
 	public HashMap<String, Object> getCertainWeather(String region) throws Exception {
 		HashMap<String, Integer> regionKey = getRegionKey(region);
 		HashMap<String, Object> certainWeather = new HashMap<>();

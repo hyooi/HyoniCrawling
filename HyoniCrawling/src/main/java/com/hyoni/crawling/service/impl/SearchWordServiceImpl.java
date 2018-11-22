@@ -34,9 +34,13 @@ public class SearchWordServiceImpl implements SearchWordService {
 	public String getAmountSearches(String searchWord) throws Exception {
 		DecimalFormat commas = new DecimalFormat("#,###");
 		HashMap<String, Object> map = searchWordDao.getAmountSearches(searchWord);
+		map.put("monthlyPcQcCnt", map.get("monthlyPcQcCnt").toString().startsWith("<")? 10: map.get("monthlyPcQcCnt"));
+		map.put("monthlyMobileQcCnt", map.get("monthlyMobileQcCnt").toString().startsWith("<")? 10: map.get("monthlyMobileQcCnt"));
+		map.put("pcMobileCntSum", (int)map.get("monthlyPcQcCnt")+(int)map.get("monthlyMobileQcCnt"));
 		
-		String resContent = "\r└ 피　씨 : "+commas.format(map.get("monthlyPcQcCnt").toString().startsWith("<")? 10: map.get("monthlyPcQcCnt"))+" 회";
-		resContent += "\r└ 모바일 : "+commas.format(map.get("monthlyMobileQcCnt").toString().startsWith("<")? 10: map.get("monthlyMobileQcCnt"))+" 회";
+		String resContent = "\r└ 피　씨 : "+commas.format(map.get("monthlyPcQcCnt"))+" 회";
+		resContent += "\r└ 모바일 : "+commas.format(map.get("monthlyMobileQcCnt"))+" 회";
+		resContent += "\r└ 합　계 : "+commas.format(map.get("pcMobileCntSum"))+" 회";
 		
 		return resContent;
 	}

@@ -17,6 +17,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -171,6 +172,7 @@ public class SearchWordDao {
 		return map;
 	}
 	
+	@Cacheable(cacheNames="naverLoginCookie")
 	private NaverAuthVO getLoginToNaverAdSystem() throws Exception {
 		/*STEP1.NNB쿠키GET*/
 		String cookieUrl = "https://lcs.naver.com/m?u=https%3A%2F%2Fsearchad.naver.com%2Flogin&e=&os=Win32&ln=ko-KR&sr=1920x1080&pr=1&bw=506&bh=952&c=24&j=N&k=Y&i=&ct=&navigationStart=1541856641040&unloadEventStart=1541856641062&unloadEventEnd=1541856641062&fetchStart=1541856641043&domainLookupStart=1541856641043&domainLookupEnd=1541856641043&connectStart=1541856641043&connectEnd=1541856641043&requestStart=1541856641045&responseStart=1541856641058&responseEnd=1541856641061&domLoading=1541856641069&domInteractive=1541856641376&domContentLoadedEventStart=1541856641376&domContentLoadedEventEnd=1541856641376&ngt=1&pid=9196f349a374ca5d550c4d3d68e535da&ts=1541856641499&EOU";
