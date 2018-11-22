@@ -16,12 +16,12 @@ import com.hyoni.crawling.service.SearchWordService;
 import com.hyoni.crawling.service.WeatherService;
 import com.hyoni.crawling.vo.ChatRequestVO;
 import com.hyoni.crawling.vo.ChatResponseVO;
-import com.hyoni.crawling.vo.MessageVO;
+import com.hyoni.crawling.vo.KeyboardVO;
 
 @RestController
 public class ChatbotController {
 	private static final Logger logger = LoggerFactory.getLogger(ChatbotController.class);
-
+	
 	@Autowired
 	private WeatherService weatherService;
 	
@@ -31,12 +31,13 @@ public class ChatbotController {
 	@Autowired
 	private OtherUtilService otherUtilService;
 	
-//	@RequestMapping(value = "/keyboard", method = RequestMethod.GET)
-//	public KeyboardVO keyboard() {
-//		KeyboardVO keyboard = new KeyboardVO(new String[] {"안녕", "도움말"});
-//		
-//		return keyboard;
-//	}
+	@RequestMapping(value = "/keyboard", method = RequestMethod.GET)
+	public KeyboardVO keyboard() {
+		logger.info("[KEYBOARD] 접속");
+		KeyboardVO keyboard = new KeyboardVO(new String[] {"안녕", "도움말"});
+		
+		return keyboard;
+	}
 	
 	@RequestMapping(value = "/message", method = RequestMethod.POST)
 	public ChatResponseVO chatRequest(@RequestBody ChatRequestVO req) throws Exception {
@@ -55,8 +56,7 @@ public class ChatbotController {
 			resContent += "\rEX. !검색 심심이";
 			resContent += "\r\r3. 로또번호 추출기";
 			resContent += "\rEX. !로또번호";
-		}
-		else if(reqContent.startsWith("!날씨")) {
+		}else if(reqContent.startsWith("!날씨")) {
 			if(reqContent.contains("서울"))	resContent = "현재 서울은 "+weatherService.getCertainWeather("seoul")+"입니다. :)";
 			else if(reqContent.contains("인천"))	resContent = "현재 인천은 "+weatherService.getCertainWeather("incheon")+"입니다. :)";
 			else if(reqContent.contains("춘천"))	resContent = "현재 춘천은 "+weatherService.getCertainWeather("chuncheon")+"입니다. :)";
@@ -72,6 +72,7 @@ public class ChatbotController {
 			else	resContent = "전국 날씨를 알려드려요~"+weatherService.getWeathers();
 		}else if(reqContent.startsWith("!검색")) {
 			String searchWord = reqContent.substring(3).trim();
+			if(searchWord.equals(""))	return new ChatResponseVO("검색어를 입력해주세요.");
 			HashMap<String, Object> resultDataFromBlog = searchWordService.getSearchWordFromBlog(searchWord);
 			DecimalFormat commas = new DecimalFormat("#,###");
 			
@@ -87,16 +88,11 @@ public class ChatbotController {
 			resContent = req.getUser_key()+"님께서 뽑으신 로또번호입니다.";
 			resContent += otherUtilService.getLottoNumbers();
 			resContent += "\r\r행운이 있기를 바랍니다. 뿅뿅!! ";
-		}
-		else {
+		}else {
 			resContent = "이해가 가지 않습니다.";
 			resContent += "\r[도움말]을 입력하시면, 사용법을 확인하실 수 있어요~";
 		}
 		
-		MessageVO mes = new MessageVO(resContent);
-		ChatResponseVO res = new ChatResponseVO();
-		res.setMessage(mes);
-		
-		return res;
+		return new ChatResponseVO(resContent);
 	}
 }
