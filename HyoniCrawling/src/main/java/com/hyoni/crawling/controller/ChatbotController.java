@@ -34,9 +34,8 @@ public class ChatbotController {
 	@RequestMapping(value = "/keyboard", method = RequestMethod.GET)
 	public KeyboardVO keyboard() {
 		logger.info("[KEYBOARD] 접속");
-		KeyboardVO keyboard = new KeyboardVO(new String[] {"안녕", "도움말"});
 		
-		return keyboard;
+		return new KeyboardVO();
 	}
 	
 	@RequestMapping(value = "/message", method = RequestMethod.POST)
@@ -48,14 +47,14 @@ public class ChatbotController {
 		
 		if ((reqContent.contains("안녕"))||(reqContent.contains("하이")||(reqContent.contains("hi")))){
 			resContent = "안녕하세요~ :)";
-		}else if(reqContent.equals("도움말")){
+		}else if(reqContent.startsWith("!도움말")){
 			resContent = "[도움말]";
 			resContent += "\r1. 날씨";
 			resContent += "\rEX.!날씨, !날씨 서울, !날씨 부산";
 			resContent += "\r\r2. 키워드 검색";
-			resContent += "\rEX. !검색 심심이";
+			resContent += "\rEX.!검색 심심이";
 			resContent += "\r\r3. 로또번호 추출기";
-			resContent += "\rEX. !로또번호";
+			resContent += "\rEX.!로또번호";
 		}else if(reqContent.startsWith("!날씨")) {
 			if(reqContent.contains("서울"))	resContent = "현재 서울은 "+weatherService.getCertainWeather("seoul")+"입니다. :)";
 			else if(reqContent.contains("인천"))	resContent = "현재 인천은 "+weatherService.getCertainWeather("incheon")+"입니다. :)";
@@ -89,8 +88,8 @@ public class ChatbotController {
 			resContent += otherUtilService.getLottoNumbers();
 			resContent += "\r\r행운이 있기를 바랍니다. 뿅뿅!! ";
 		}else {
-			resContent = "이해가 가지 않습니다.";
-			resContent += "\r[도움말]을 입력하시면, 사용법을 확인하실 수 있어요~";
+			resContent = "안녕하세요. 심심이입니다.";
+			resContent += "\r명령어는 '!도움말'을 외쳐주세요.";
 		}
 		
 		return new ChatResponseVO(resContent);
