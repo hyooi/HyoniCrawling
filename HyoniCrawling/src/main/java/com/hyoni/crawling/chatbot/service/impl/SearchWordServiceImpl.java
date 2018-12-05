@@ -1,4 +1,4 @@
-package com.hyoni.crawling.service.impl;
+package com.hyoni.crawling.chatbot.service.impl;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -6,8 +6,8 @@ import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hyoni.crawling.dao.SearchWordDao;
-import com.hyoni.crawling.service.SearchWordService;
+import com.hyoni.crawling.chatbot.dao.SearchWordDao;
+import com.hyoni.crawling.chatbot.service.SearchWordService;
 
 @Service
 public class SearchWordServiceImpl implements SearchWordService {	

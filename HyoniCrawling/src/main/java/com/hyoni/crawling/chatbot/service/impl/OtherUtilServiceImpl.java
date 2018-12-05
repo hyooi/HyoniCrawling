@@ -1,10 +1,10 @@
-package com.hyoni.crawling.service.impl;
+package com.hyoni.crawling.chatbot.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hyoni.crawling.dao.OtherUtilDao;
-import com.hyoni.crawling.service.OtherUtilService;
+import com.hyoni.crawling.chatbot.dao.OtherUtilDao;
+import com.hyoni.crawling.chatbot.service.OtherUtilService;
 
 @Service
 public class OtherUtilServiceImpl implements OtherUtilService {
@@ -41,6 +41,6 @@ public class OtherUtilServiceImpl implements OtherUtilService {
 
 	@Override
 	public String getOtherRequest() {
-		return "안녕하세요. 심심이입니다.\r명령어는 '!도움말'을 외쳐주세요.";
+		return "안녕하세요. 심심이입니다.\r명령어는 '!도움말'을 외쳐주세요. :)";
 	}	
 }

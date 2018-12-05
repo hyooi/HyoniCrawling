@@ -1,4 +1,4 @@
-package com.hyoni.crawling.vo;
+package com.hyoni.crawling.common.vo;
 
 public class NaverAuthVO {
 	private String nnb;

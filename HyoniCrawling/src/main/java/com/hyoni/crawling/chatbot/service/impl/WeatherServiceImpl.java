@@ -1,12 +1,12 @@
-package com.hyoni.crawling.service.impl;
+package com.hyoni.crawling.chatbot.service.impl;
 
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hyoni.crawling.dao.WeatherDao;
-import com.hyoni.crawling.service.WeatherService;
+import com.hyoni.crawling.chatbot.dao.WeatherDao;
+import com.hyoni.crawling.chatbot.service.WeatherService;
 
 @Service
 public class WeatherServiceImpl implements WeatherService {	

@@ -1,4 +1,4 @@
-package com.hyoni.crawling.vo;
+package com.hyoni.crawling.chatbot.vo;
 
 public class KeyboardVO {
 	private String type;

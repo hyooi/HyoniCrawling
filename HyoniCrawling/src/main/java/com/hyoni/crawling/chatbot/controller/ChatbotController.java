@@ -1,4 +1,4 @@
-package com.hyoni.crawling.controller;
+package com.hyoni.crawling.chatbot.controller;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hyoni.crawling.service.OtherUtilService;
-import com.hyoni.crawling.service.SearchWordService;
-import com.hyoni.crawling.service.WeatherService;
-import com.hyoni.crawling.vo.ChatRequestVO;
-import com.hyoni.crawling.vo.ChatResponseVO;
-import com.hyoni.crawling.vo.KeyboardVO;
+import com.hyoni.crawling.chatbot.service.OtherUtilService;
+import com.hyoni.crawling.chatbot.service.SearchWordService;
+import com.hyoni.crawling.chatbot.service.WeatherService;
+import com.hyoni.crawling.chatbot.vo.ChatRequestVO;
+import com.hyoni.crawling.chatbot.vo.ChatResponseVO;
+import com.hyoni.crawling.chatbot.vo.KeyboardVO;
 
 @RestController
 public class ChatbotController {
@@ -34,7 +34,6 @@ public class ChatbotController {
 	@RequestMapping(value = "/keyboard", method = RequestMethod.GET)
 	public KeyboardVO keyboard() {
 		logger.info("[KEYBOARD] 접속");
-		
 		return new KeyboardVO();
 	}
 	
@@ -42,12 +41,9 @@ public class ChatbotController {
 	public ChatResponseVO chatRequest(@RequestBody ChatRequestVO req) throws Exception {
 		String reqContent = req.getContent();
 		String resContent;
-		
 		logger.info("[MESSAGE] USER : " + req.getUser_key() + " | REQUEST : " + reqContent);
 		
-		if ((reqContent.contains("안녕"))||(reqContent.contains("하이")||(reqContent.contains("hi")))){
-			resContent = "안녕하세요 :)";
-		}else if(reqContent.startsWith("!도움말")){
+		if (reqContent.startsWith("!도움말")){
 			resContent = otherUtilService.getHelpMessage();
 		}else if(reqContent.startsWith("!날씨")) {
 			resContent = weatherService.getWeathers();

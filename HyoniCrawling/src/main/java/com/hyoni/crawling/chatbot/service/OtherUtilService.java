@@ -1,4 +1,4 @@
-package com.hyoni.crawling.service;
+package com.hyoni.crawling.chatbot.service;
 
 public interface OtherUtilService {
 	String getLottoNumbers(String userKey);

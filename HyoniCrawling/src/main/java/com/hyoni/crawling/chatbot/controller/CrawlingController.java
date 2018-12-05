@@ -1,4 +1,4 @@
-package com.hyoni.crawling.controller;
+package com.hyoni.crawling.chatbot.controller;
 
 import java.io.IOException;
 
