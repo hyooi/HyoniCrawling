@@ -21,9 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hyoni.crawling.common.dao.NaverAdsystemDao;
 
@@ -36,40 +34,46 @@ public class SearchWordDao {
 	private final String CLEINT_SECRET = "XvTpNcCebC";
 	
 	@Test
-	public void getTopRandomKeyword() throws JsonParseException, JsonMappingException, IOException, JSONException {
-		String connectUrl = "https://manage.searchad.naver.com/keywordstool?format=json&siteId=&mobileSiteId=&hintKeywords=&includeHintKeywords=0&showDetail=1&biztpId=&mobileBiztpId=&month=12&event=&keyword=";
-		
+	public void getTopRandomKeyword() throws Exception {
+		int[] month = {1,2,3,4,5,6,7,8,9,10,11,12};
 		Document doc = null;
 		String item = null;
-		try {
-			doc = Jsoup.connect(connectUrl)
-					.header("Accept", "application/json, text/plain, */*")
-					.header("Accept-encoding", "gzip, deflate, br")
-					.header("Accept-language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7")
-					.header("authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiZ3lkbHMyMDAwOm5hdmVyIiwicm9sZSI6MCwiY2xpZW50SWQiOiJuYXZlci1jb29raWUiLCJpc0FwaSI6ZmFsc2UsInVzZXJJZCI6MTcyNTUwNCwidXNlcktleSI6IjFmMjdkNGI1LTM0MjctNDliMy05NDcwLWIxZDRhN2ZjYTg1NiIsImNsaWVudEN1c3RvbWVySWQiOjE1MDY2MzQsImlzc3VlVHlwZSI6InVzZXIiLCJuYmYiOjE1NDM4NDY3NTksImlkcCI6InVzZXItZXh0LWF1dGgiLCJjdXN0b21lcklkIjoxNTA2NjM0LCJleHAiOjE1NDM4NDc0MTksImlhdCI6MTU0Mzg0NjgxOSwianRpIjoiOWNlYWJlMGUtZTY0Yy00NGFjLTliZGYtZjM3ZTdlN2E1ZGFiIn0.RlUPTWhORRQAF2Q6oE0TQXSHA7MTs5PYlpLc41cc29w")
-					.header("cooike", "NNB=TBZ64HRKG4CVY; nid_inf=1907649152; NID_AUT=usHad2t4W0l+aauRw/Q/Du0atzZ5QPoiIfT58u5vEn4n1R4a6oWZrl05Fs239NPd; NID_JKL=g8Ri1rSE1osLnxHtQi8a9fVXY9kfJDbvEgrcN6I9Rx4=; NID_SES=AAABmze9ehBvFrxAEHACoNaSybYuO8fOtASTvAAslyBpzg3AksU9FdzLZNR1lF9mu9RSqTX+IZPwhWvCIcg36/WMBFcSeYCrEQqFXrr4YXmvEi8EfNZd22EzDEiY8BuhKAwLk+btmPNi2h9rISrQn9JmzucALr49yyaQSXg8w2F9CdruLYg2SExrTjf/09hlQyEJGD9oyKapOFRt791b7+Z+EprplD/x1fWs1GadpD9DyQ3CrXPlKfPSBJWFN5bQcl5oY40ifs/CEBHHh0wT0vHN/eLhxzIUanBW8VImyzA0wSiEr3h8Q3AssNOy+kjR/IkALsafpW5wDx0RyP4AGRmqkeMDc0Lt+QCBb1Q/bBdienMaj4AAFnyY1Y6VhpsYZSSlTh9FyikvOVkRyxHGPH8ZGktNpK/DBqrn7OxcMVzU9ayAe7+tnShbofc3v7Tm39MKQPYlLFMxlF4zIsnjM08KGu8AstUAVfvNayCF6eeN2gzO7O2/94VaRvEiWZuzClTDsjvqtkPInBvyt21/lKuLxyVpxqYKnuQI81FKKp73ZxTp; 066c80626d06ffa5b32035f35cabe88d=%3ER%95%04%E3%D26%F0%3B%94%87%25%BB%CA%FF%BDzc%C5%F06%E0%06W%7E%19%9E%DA%9Dp%92%29g%07%7E%E2%AF%1B%93%F2%9F%06%03Y%B2%EFn%87%D7%EB%A3%9F%FB%99%08%AB%7FKa%0D%8DZ%B5TFGu%2B%12%2C8%F7%91%92%AC%14%F0%A7M%0C%A6%82%1B%ED%9D%5B6%FF%B5%85%F25n%EA%B0%1D%A7rQ%DA%CA%A5%9D%A5r%14%27%28%16t%EEq%3C.%BA%F1%07_lcn%DBDE%AF%F1%1E%01%F0%1Cp%1Fc%8CQ%A7%EAeJQ%D6w%2C%EB; 1a5b69166387515780349607c54875af=%28%DE%DD%D0%B4%DE%87%09; 1b25d439ceac51f5d414df7689017f6c=%AE%E2%BFK%3D%9B%07K%FD%15%0B%15%DC%97%95%C4%A3%B8%DD%E9%D6%3F%12a%3B%D6%CDj%DA%11%DCB%BB%2B%19%3B%C37%C1%CA%14%7D%7C%11%B9%15%25%83%13%EF%83%24%C1%CB%5C%3E%CC%B2Z+%29%09%0AJsHr%C6Xj6%94TRy%DEC%3E%1F%D0%C8%7F%19%C2%B0%CB%FDaN5%27F%B31%3EC%29%2A%5C%94%FAE.%E0%97%7E%3E%EC%D1%9A%A8%D6%5B%BF1%B5%DB%07%A5%BA%85kO%AB%C3%06%F1%ABcj%9C%90%EC%F0%96%1Dh%DBi%82%B0%B5%CFu%9D%1B%F3%91Z%C1%BB%D6%03q%A4%8B%8Bi%5B%A0y%18%FC%F9%B6%FE%B4%99z%A4%8C%CE%A0sV%EC%A6u%1Aj-T%B9%DE%E5o%25%29%26%8D%3A%F9%C6%21YxD%2A%B1%9C%0Em%C9%A4%B4%AF9%AA%9B%13E%07Zm%88%09%92%C9+%DC%07%CDZ%5C%09%BC%2FxZ%A9%96%7C-%94%29%A1%A6%EF%1E%06%F8%14tz%5B%F2J%EB8B%2C%22%D6%DE%C7%7E%9D%C1%9A%FA%85%3E%FE%B74%14%92%A9L%F8%AF%7F%0A3%5CZ%D3%C3%EE%DFI%22%27%119%CA7%12%A6%0E%827%B2%A6%87%2BE%85%5C%02%C6v%3A%A6B%0B%C0d%B0%C0e%F4X%3C%24%ED%F4%DBzb%03%3AeS%3EHM%23%B1u8%FB%D6%1E%0E%D6Df%B7%C9D%5Ct%CA%23%92I%B5%23g%FA%7B%AEN%E4%EB%195%0B%03%98%7F%CFS.%09%27%8A%FF%D6lL%3Bo+%18%B1%B5Vl%404t%FF%BCH%04%F5%A7%D8%26%24%8B%D7-s%D0%AC%01s%0Bu%9E%81%40%9A%B9%EAj%1A%D0%0C%A9%7C%CF%9D%D6%86%1E%2C%8E%3A%15c%81%5CY%DB%8C%FBD%7C%96%13%BBL%F6F%226I%9B%C0%F8%B5%18%01N5%5D%D5%D1%CA-%84%2C%8A7%99%D2%C7%94%CD%F4%08%98%F5%2C%93X%B2%CBR%B9%D0%24%DD%BA%60%2F12%FE%1BM%E3%DBi%C9%7E%D4%EBF%E0%5DY%5CWiV%9E%04d%5E%F15%06%5E%F0%FC%81+%AC%EAh%FF6%16%7E%1ER%0E%3E6%01%89%0A%25%8F%85%A7%2B%8Dg%E1%DF%86%F6n%EB%17%9F%A2%28b%F7%0B%CB%EF%C764%01K%02%5C%8B%16v%3Dz%D3%E8%28%02%AAu%85%90%18%EB%B43%D9%10%F7%01%9B%FAH%81%96%DD%A2%8D%C3wQ%AEl%BF%FE%FD%28%8F.f%D4%D6%BE")
-//					.header("authorization", "Bearer "+NaverAdsystemDao.naverAuthVO.getToken())
-//					.header("cookie", "NNB="+NaverAdsystemDao.naverAuthVO.getNnb()+"; "+"nid_inf=1907649152; NID_AUT=usHad2t4W0l+aauRw/Q/Du0atzZ5QPoiIfT58u5vEn4n1R4a6oWZrl05Fs239NPd; NID_JKL=g8Ri1rSE1osLnxHtQi8a9fVXY9kfJDbvEgrcN6I9Rx4=; NID_SES=AAABmze9ehBvFrxAEHACoNaSybYuO8fOtASTvAAslyBpzg3AksU9FdzLZNR1lF9mu9RSqTX+IZPwhWvCIcg36/WMBFcSeYCrEQqFXrr4YXmvEi8EfNZd22EzDEiY8BuhKAwLk+btmPNi2h9rISrQn9JmzucALr49yyaQSXg8w2F9CdruLYg2SExrTjf/09hlQyEJGD9oyKapOFRt791b7+Z+EprplD/x1fWs1GadpD9DyQ3CrXPlKfPSBJWFN5bQcl5oY40ifs/CEBHHh0wT0vHN/eLhxzIUanBW8VImyzA0wSiEr3h8Q3AssNOy+kjR/IkALsafpW5wDx0RyP4AGRmqkeMDc0Lt+QCBb1Q/bBdienMaj4AAFnyY1Y6VhpsYZSSlTh9FyikvOVkRyxHGPH8ZGktNpK/DBqrn7OxcMVzU9ayAe7+tnShbofc3v7Tm39MKQPYlLFMxlF4zIsnjM08KGu8AstUAVfvNayCF6eeN2gzO7O2/94VaRvEiWZuzClTDsjvqtkPInBvyt21/lKuLxyVpxqYKnuQI81FKKp73ZxTp; 066c80626d06ffa5b32035f35cabe88d=%3ER%95%04%E3%D26%F0%3B%94%87%25%BB%CA%FF%BDzc%C5%F06%E0%06W%7E%19%9E%DA%9Dp%92%29g%07%7E%E2%AF%1B%93%F2%9F%06%03Y%B2%EFn%87%D7%EB%A3%9F%FB%99%08%AB%7FKa%0D%8DZ%B5TFGu%2B%12%2C8%F7%91%92%AC%14%F0%A7M%0C%A6%82%1B%ED%9D%5B6%FF%B5%85%F25n%EA%B0%1D%A7rQ%DA%CA%A5%9D%A5r%14%27%28%16t%EEq%3C.%BA%F1%07_lcn%DBDE%AF%F1%1E%01%F0%1Cp%1Fc%8CQ%A7%EAeJQ%D6w%2C%EB; 1a5b69166387515780349607c54875af=%28%DE%DD%D0%B4%DE%87%09; 1b25d439ceac51f5d414df7689017f6c=%AE%E2%BFK%3D%9B%07K%FD%15%0B%15%DC%97%95%C4%A3%B8%DD%E9%D6%3F%12a%3B%D6%CDj%DA%11%DCB%BB%2B%19%3B%C37%C1%CA%14%7D%7C%11%B9%15%25%83%13%EF%83%24%C1%CB%5C%3E%CC%B2Z+%29%09%0AJsHr%C6Xj6%94TRy%DEC%3E%1F%D0%C8%7F%19%C2%B0%CB%FDaN5%27F%B31%3EC%29%2A%5C%94%FAE.%E0%97%7E%3E%EC%D1%9A%A8%D6%5B%BF1%B5%DB%07%A5%BA%85kO%AB%C3%06%F1%ABcj%9C%90%EC%F0%96%1Dh%DBi%82%B0%B5%CFu%9D%1B%F3%91Z%C1%BB%D6%03q%A4%8B%8Bi%5B%A0y%18%FC%F9%B6%FE%B4%99z%A4%8C%CE%A0sV%EC%A6u%1Aj-T%B9%DE%E5o%25%29%26%8D%3A%F9%C6%21YxD%2A%B1%9C%0Em%C9%A4%B4%AF9%AA%9B%13E%07Zm%88%09%92%C9+%DC%07%CDZ%5C%09%BC%2FxZ%A9%96%7C-%94%29%A1%A6%EF%1E%06%F8%14tz%5B%F2J%EB8B%2C%22%D6%DE%C7%7E%9D%C1%9A%FA%85%3E%FE%B74%14%92%A9L%F8%AF%7F%0A3%5CZ%D3%C3%EE%DFI%22%27%119%CA7%12%A6%0E%827%B2%A6%87%2BE%85%5C%02%C6v%3A%A6B%0B%C0d%B0%C0e%F4X%3C%24%ED%F4%DBzb%03%3AeS%3EHM%23%B1u8%FB%D6%1E%0E%D6Df%B7%C9D%5Ct%CA%23%92I%B5%23g%FA%7B%AEN%E4%EB%195%0B%03%98%7F%CFS.%09%27%8A%FF%D6lL%3Bo+%18%B1%B5Vl%404t%FF%BCH%04%F5%A7%D8%26%24%8B%D7-s%D0%AC%01s%0Bu%9E%81%40%9A%B9%EAj%1A%D0%0C%A9%7C%CF%9D%D6%86%1E%2C%8E%3A%15c%81%5CY%DB%8C%FBD%7C%96%13%BBL%F6F%226I%9B%C0%F8%B5%18%01N5%5D%D5%D1%CA-%84%2C%8A7%99%D2%C7%94%CD%F4%08%98%F5%2C%93X%B2%CBR%B9%D0%24%DD%BA%60%2F12%FE%1BM%E3%DBi%C9%7E%D4%EBF%E0%5DY%5CWiV%9E%04d%5E%F15%06%5E%F0%FC%81+%AC%EAh%FF6%16%7E%1ER%0E%3E6%01%89%0A%25%8F%85%A7%2B%8Dg%E1%DF%86%F6n%EB%17%9F%A2%28b%F7%0B%CB%EF%C764%01K%02%5C%8B%16v%3Dz%D3%E8%28%02%AAu%85%90%18%EB%B43%D9%10%F7%01%9B%FAH%81%96%DD%A2%8D%C3wQ%AEl%BF%FE%FD%28%8F.f%D4%D6%BE")
-					.header("referer", "https://manage.searchad.naver.com/customers/1506634/tool/keyword-planner")
-					.header("x-accept-language", "ko-KR")
-					.userAgent(USER_AGENT).ignoreContentType(true).get();
-			item = doc.text();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		/*JSON TO MAP 컨버팅*/
-		JSONObject obj = 	new JSONObject(item);
-		JSONArray jsonArr = obj.getJSONArray("keywordList");
-		List<HashMap<String, Object>> keywordList;	
-		ObjectMapper mapper = new ObjectMapper();
-		keywordList = mapper.readValue(jsonArr.toString(), new TypeReference<List<HashMap<String, Object>>>(){});
-		System.out.println(keywordList.get(0));
-		System.out.println(keywordList.get(1));
-		
-		/*검색량 합계 2,000이상, 문서수 300 이하 키워드 찾기*/
-		for (HashMap<String, Object> keyword : keywordList) {
-			if((int)keyword.get("monthlyPcQcCnt")+(int)keyword.get("monthlyMobileQcCnt") > 2000){
-				logger.info("검색량 합계 2,000이상 : "+keyword.get("relKeyword"));
+		for (int idx1 : month) {
+			String connectUrl = "https://manage.searchad.naver.com/keywordstool?format=json&siteId=&mobileSiteId=&hintKeywords=&includeHintKeywords=0&showDetail=1&biztpId=&mobileBiztpId=&month="+idx1+"&event=&keyword=";
+			try {
+				doc = Jsoup.connect(connectUrl)
+						.header("Accept", "application/json, text/plain, */*")
+						.header("Accept-encoding", "gzip, deflate, br")
+						.header("Accept-language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7")
+						.header("authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpbklkIjoiZ3lkbHMyMDAwOm5hdmVyIiwicm9sZSI6MCwiY2xpZW50SWQiOiJuYXZlci1jb29raWUiLCJpc0FwaSI6ZmFsc2UsInVzZXJJZCI6MTcyNTUwNCwidXNlcktleSI6ImQxZTFiMjQ3LWMwNDUtNGRkMi04NDg5LWM0ZTdiZWI0OTRkMiIsImNsaWVudEN1c3RvbWVySWQiOjE1MDY2MzQsImlzc3VlVHlwZSI6InVzZXIiLCJuYmYiOjE1NDQwMjExODEsImlkcCI6InVzZXItZXh0LWF1dGgiLCJjdXN0b21lcklkIjoxNTA2NjM0LCJleHAiOjE1NDQwMjE4NDEsImlhdCI6MTU0NDAyMTI0MSwianRpIjoiZjE5NTUxZGItNTM2Ni00ZTc0LTg0NmQtNGFjZDFjMjgyMGIwIn0.QVDCt-2TZu81RAaJNuTLtvQjlaSTyXwW3FYVgbflllk")
+						.header("cooike", "NNB=KPQY2DGKZYDVY; npic=nu7sG/qbJWMUTuvYwoiOmiiKLDdgMPIo7jb3dDb/3LG7tiJQRIaIcKkd3Vrb+jJICA==; nid_inf=1982949732; NID_AUT=yA28vl/OZCuzz8psAgvGxkTMoTe8MKrifFdPELIWOh2/Xj57Xh2Lso1tVoW2edtZ; NID_JKL=kK9crn9KiMIez8eb+Nms9oLx2DYXftcs4pADxan9jxs=; NID_SES=AAABmBexj0i0bRyYayzmiecSGHydJ7OeVtiMCm7pv3wDb4D0m7izdaIGx8ekx0DQgGk8jHry2dXy0VthdwxNSYbShHevinaQNsjdxIHkmJhnaR9wIpgpfWys2pdNqK8pqsK3D5Y9qVbkSwBY9+XRVgz3UbLiaF2t+udJvro1mApUkUZAzHO/eQKvoo141nsBnIp+T0AcJg7IL7WkXZ5PvtPlDeXTLoD/U6hZnC4/z4gIB/tgo+6c8aeE8h/yuOSjxmfvsy0SYBxAjoNHvArbEk5AE3pZxpFl9bw2Sddwx1TKB5gVxxRS2YLuWSAEg/4gQqfXxLiJiQRjnKy770qEqrw7Vy5b5Vp/uXQkOyo+T8Z6oXGFZ5r+xirp5tDNQpyU2yg7wQktuxASZyAZovOU4g5PE6u+B9uj0Z5Lu3fAhucHnQK/7s3ONGgRzx4JbaoU7ieYGSe18krYsfMorkNRf+ivy4rBlONJGTY8JcvuKrj5yZX1GZV3vqCcvXvnQBUTBXTirkERXQvZRiZudeeRye45Ad3CVRFhNQt80zc0ZIZELXm8; 066c80626d06ffa5b32035f35cabe88d=%3ER%95%04%E3%D26%F0%3B%94%87%25%BB%CA%FF%BDzc%C5%F06%E0%06W%01%08%7D%24%7Ed%F0%8BQ%AEQX%F1u%F2%877%AC%B5%92%F9%CB%AD%18%FCn%93%86%27S%7D%5C%EE%C8i%00%08%A7%DB%3AFGu%2B%12%2C8%F7%91%92%AC%14%F0%A7M%0C%A6%82%1B%ED%9D%5B6%FF%B5%85%F25n%EA%B0%1D%A0%1F%A7O%7D%8E%8EuVa%B7u%96%E6%B8%FA%3C.%BA%F1%07_lcn%DBDE%AF%F1%1E%019%D0%83%E5%92%E6%2B%F4%97%F3%2A%A8j%9CQ%B3; 1a5b69166387515780349607c54875af=%28%DE%DD%D0%B4%DE%87%09; 1b25d439ceac51f5d414df7689017f6c=%AE%E2%BFK%3D%9B%07K%FD%15%0B%15%DC%97%95%C4%A3%B8%DD%E9%D6%3F%12a%3B%D6%CDj%DA%11%DCB%BB%2B%19%3B%C37%C1%CA%14%7D%7C%11%B9%15%25%83%13%EF%83%24%C1%CB%5C%3E%CC%B2Z+%29%09%0AJsHr%C6Xj6%94TRy%DEC%3E%1F%D0%C8%7F%19%C2%B0%CB%FDaN5%27F%B31%3EC%29%2A%5C%94%FAE.%E0%97%7E%3E%EC%D1%9A%A8%D6%5B%BF1%B5%DB%07%A5%BA%85kO%AB%C3%06%F1%ABcj%9C%90%EC%F0%96%1Dh%DBi%82%B0%B5%CFu%9D%1B%F3%91Z%C1%BB%D6%03q%A4%8B%8Bi%5B%A0y%18%FC%F9%B6%FE%B4%99z%A4%8C%CE%A0sV%EC%A6u%1Aj-T%B9%DEYQ%F12%F7%FE5%D4y%83%D25%9D%E8%C0%DDq%1D%E6%AF%3D0%98%19%08%E3%91%1B%10%D5%E3%AD%CC%D2%DC%B6%E6Mx9A%02%FFQ%3Aa%14%1Ewu%9D%F0%1E%C3%40%2A%F8%14tz%5B%F2J%EB8B%2C%22%D6%DE%C7%7E%9D%C1%9A%FA%85%3E%FE%B74%14%92%A9L%F8%AF%7F%0A3%5CZ%D3%C3%EE%DFI%22%27%119%CA7%12%A6%0E%827%B2%A6%87%2BE%85%5C%02%C6v%3A%A6B%0B%C0d%B0%C0e%F4%22%CA%F0%F0%0E%3Fq%1C%E4%D6%86%84k%C7%0Bf%B1u8%FB%D6%1E%0E%D6Df%B7%C9D%5Ct%CA%23%92I%B5%23g%FA%7B%AEN%E4%EB%195%0B%03%98%7F%CFS.%09%27%8A%FF%D6lL%3Bo+%18%B1%B5Vl%404t%FF%BCH%04%F5%A7%D8%26%244%13%0A%C8%5E%DF%0C%EES%0CqnZ%B6%86%92%EA%17%C4%A81%F7g%D7Qm_%CA%FD%DE%3A%06%81%5CY%DB%8C%FBD%7C%F4j%14%AC%BF%2FNC%93I%C2%7D%FFs%B4J%96%D1%7F%3F%BD%7D%A2%E5%FET%192%F8%25%96%A2%C0%B8%21%8A%03%06%E2%D7%60%3C%D7%88%DF%F6N%21%8B%E0%91W%F9%BBn%3C%00%B0%E5%E2%95%F7%B8%0D%FD%805%C1GoW%93%7C%8A%3C%E2%85I%F19%0A%87%A6%40%0D%7E%28%85T%E2H%D7%5B5%E7%9A3%EF%B3%C8%3A%E8j%D8%86%F6n%EB%17%9F%A2%28%90%EA%19+%EB8%A0%03%2A%CBY%CAN%2C%1D%8C%FAJ1s%C8%A7%04%01%08%14c%5C%B8%8E%FD%87%AD%A3%FC%9B%00C%ED%7B%9B%91N%B2q%049c%FD%28%8F.f%D4%D6%BE")
+//						.header("authorization", "Bearer "+NaverAdsystemDao.naverAuthVO.getToken())
+//						.header("cookie", "NNB="+NaverAdsystemDao.naverAuthVO.getNnb()+"; "+"npic=nu7sG/qbJWMUTuvYwoiOmiiKLDdgMPIo7jb3dDb/3LG7tiJQRIaIcKkd3Vrb+jJICA==; nid_inf=1982949732; NID_AUT=yA28vl/OZCuzz8psAgvGxkTMoTe8MKrifFdPELIWOh2/Xj57Xh2Lso1tVoW2edtZ; NID_JKL=kK9crn9KiMIez8eb+Nms9oLx2DYXftcs4pADxan9jxs=; NID_SES=AAABmBexj0i0bRyYayzmiecSGHydJ7OeVtiMCm7pv3wDb4D0m7izdaIGx8ekx0DQgGk8jHry2dXy0VthdwxNSYbShHevinaQNsjdxIHkmJhnaR9wIpgpfWys2pdNqK8pqsK3D5Y9qVbkSwBY9+XRVgz3UbLiaF2t+udJvro1mApUkUZAzHO/eQKvoo141nsBnIp+T0AcJg7IL7WkXZ5PvtPlDeXTLoD/U6hZnC4/z4gIB/tgo+6c8aeE8h/yuOSjxmfvsy0SYBxAjoNHvArbEk5AE3pZxpFl9bw2Sddwx1TKB5gVxxRS2YLuWSAEg/4gQqfXxLiJiQRjnKy770qEqrw7Vy5b5Vp/uXQkOyo+T8Z6oXGFZ5r+xirp5tDNQpyU2yg7wQktuxASZyAZovOU4g5PE6u+B9uj0Z5Lu3fAhucHnQK/7s3ONGgRzx4JbaoU7ieYGSe18krYsfMorkNRf+ivy4rBlONJGTY8JcvuKrj5yZX1GZV3vqCcvXvnQBUTBXTirkERXQvZRiZudeeRye45Ad3CVRFhNQt80zc0ZIZELXm8; 066c80626d06ffa5b32035f35cabe88d=%3ER%95%04%E3%D26%F0%3B%94%87%25%BB%CA%FF%BDzc%C5%F06%E0%06W%01%08%7D%24%7Ed%F0%8BQ%AEQX%F1u%F2%877%AC%B5%92%F9%CB%AD%18%FCn%93%86%27S%7D%5C%EE%C8i%00%08%A7%DB%3AFGu%2B%12%2C8%F7%91%92%AC%14%F0%A7M%0C%A6%82%1B%ED%9D%5B6%FF%B5%85%F25n%EA%B0%1D%A0%1F%A7O%7D%8E%8EuVa%B7u%96%E6%B8%FA%3C.%BA%F1%07_lcn%DBDE%AF%F1%1E%019%D0%83%E5%92%E6%2B%F4%97%F3%2A%A8j%9CQ%B3; 1a5b69166387515780349607c54875af=%28%DE%DD%D0%B4%DE%87%09; 1b25d439ceac51f5d414df7689017f6c=%AE%E2%BFK%3D%9B%07K%FD%15%0B%15%DC%97%95%C4%A3%B8%DD%E9%D6%3F%12a%3B%D6%CDj%DA%11%DCB%BB%2B%19%3B%C37%C1%CA%14%7D%7C%11%B9%15%25%83%13%EF%83%24%C1%CB%5C%3E%CC%B2Z+%29%09%0AJsHr%C6Xj6%94TRy%DEC%3E%1F%D0%C8%7F%19%C2%B0%CB%FDaN5%27F%B31%3EC%29%2A%5C%94%FAE.%E0%97%7E%3E%EC%D1%9A%A8%D6%5B%BF1%B5%DB%07%A5%BA%85kO%AB%C3%06%F1%ABcj%9C%90%EC%F0%96%1Dh%DBi%82%B0%B5%CFu%9D%1B%F3%91Z%C1%BB%D6%03q%A4%8B%8Bi%5B%A0y%18%FC%F9%B6%FE%B4%99z%A4%8C%CE%A0sV%EC%A6u%1Aj-T%B9%DEYQ%F12%F7%FE5%D4y%83%D25%9D%E8%C0%DDq%1D%E6%AF%3D0%98%19%08%E3%91%1B%10%D5%E3%AD%CC%D2%DC%B6%E6Mx9A%02%FFQ%3Aa%14%1Ewu%9D%F0%1E%C3%40%2A%F8%14tz%5B%F2J%EB8B%2C%22%D6%DE%C7%7E%9D%C1%9A%FA%85%3E%FE%B74%14%92%A9L%F8%AF%7F%0A3%5CZ%D3%C3%EE%DFI%22%27%119%CA7%12%A6%0E%827%B2%A6%87%2BE%85%5C%02%C6v%3A%A6B%0B%C0d%B0%C0e%F4%22%CA%F0%F0%0E%3Fq%1C%E4%D6%86%84k%C7%0Bf%B1u8%FB%D6%1E%0E%D6Df%B7%C9D%5Ct%CA%23%92I%B5%23g%FA%7B%AEN%E4%EB%195%0B%03%98%7F%CFS.%09%27%8A%FF%D6lL%3Bo+%18%B1%B5Vl%404t%FF%BCH%04%F5%A7%D8%26%244%13%0A%C8%5E%DF%0C%EES%0CqnZ%B6%86%92%EA%17%C4%A81%F7g%D7Qm_%CA%FD%DE%3A%06%81%5CY%DB%8C%FBD%7C%F4j%14%AC%BF%2FNC%93I%C2%7D%FFs%B4J%96%D1%7F%3F%BD%7D%A2%E5%FET%192%F8%25%96%A2%C0%B8%21%8A%03%06%E2%D7%60%3C%D7%88%DF%F6N%21%8B%E0%91W%F9%BBn%3C%00%B0%E5%E2%95%F7%B8%0D%FD%805%C1GoW%93%7C%8A%3C%E2%85I%F19%0A%87%A6%40%0D%7E%28%85T%E2H%D7%5B5%E7%9A3%EF%B3%C8%3A%E8j%D8%86%F6n%EB%17%9F%A2%28%90%EA%19+%EB8%A0%03%2A%CBY%CAN%2C%1D%8C%FAJ1s%C8%A7%04%01%08%14c%5C%B8%8E%FD%87%AD%A3%FC%9B%00C%ED%7B%9B%91N%B2q%049c%FD%28%8F.f%D4%D6%BE")
+						.header("referer", "https://manage.searchad.naver.com/customers/1506634/tool/keyword-planner")
+						.header("x-accept-language", "ko-KR")
+						.userAgent(USER_AGENT).ignoreContentType(true).get();
+				item = doc.text();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			/*JSON TO MAP 컨버팅*/
+			JSONObject obj = 	new JSONObject(item);
+			JSONArray jsonArr = obj.getJSONArray("keywordList");
+			List<HashMap<String, Object>> keywordList;	
+			ObjectMapper mapper = new ObjectMapper();
+			keywordList = mapper.readValue(jsonArr.toString(), new TypeReference<List<HashMap<String, Object>>>(){});
+
+			int monthlyPcQcCnt;
+			int monthlyMobileQcCnt;
+			int resultBlogCnt;
+			for (int idx2 = 0; idx2 < keywordList.size(); idx2++) {
+				System.out.println(idx2+", "+keywordList.get(idx2).get("relKeyword"));
+				monthlyPcQcCnt = keywordList.get(idx2).get("monthlyPcQcCnt").toString().startsWith("<")? 0: (int) keywordList.get(idx2).get("monthlyPcQcCnt");
+				monthlyMobileQcCnt = keywordList.get(idx2).get("monthlyMobileQcCnt").toString().startsWith("<")? 0: (int) keywordList.get(idx2).get("monthlyMobileQcCnt");
+				if(monthlyPcQcCnt+monthlyMobileQcCnt > 2000) {
+					resultBlogCnt = (int) getSearchWordFromBlog(keywordList.get(idx2).get("relKeyword").toString()).get("blogTotal");
+					if(resultBlogCnt < 300) System.out.println(idx1+"월 : "+resultBlogCnt+", 데이터 : "+keywordList.get(idx2).get("relKeyword"));
+				}
 			}
 		}
 	}
@@ -120,7 +124,7 @@ public class SearchWordDao {
 				else if(tmp.contains("naver"))	linkRank += "n, ";
 				else	linkRank += "e, ";
 			}
-			resultData.put("blogLinks", linkRank.substring(0, linkRank.length()-2));
+			resultData.put("blogLinks", linkRank.length() ==0? "없음" : linkRank.substring(0, linkRank.length()-2));
 		}
 		
 		return resultData;
