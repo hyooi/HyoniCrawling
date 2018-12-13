@@ -1,18 +1,21 @@
 package com.hyoni.crawling.chatbot.dao;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.TreeSet;
 
 import org.springframework.stereotype.Repository;
 
 @Repository("OtherUtilDao")
 public class OtherUtilDao {
 	public String getLottoNumber() {
-		int[] lottoNum = new int[6];
-		for (int i = 0; i < 6; i++) {
-			lottoNum[i] = (int)(Math.random()*45+1);
-			if(i==5) Arrays.sort(lottoNum);
+		TreeSet<Integer> sortedlottoNum = new TreeSet<>();
+		while (true) {
+			sortedlottoNum.add((int) (Math.random()*45+1));
+			if(sortedlottoNum.size() == 5) break;
 		}
-		return lottoNum[0]+", "+lottoNum[1]+", "+lottoNum[2]+", "+lottoNum[3]+", "+lottoNum[4]+", "+lottoNum[5];
+		
+		ArrayList<Integer> returnLottoNum = new ArrayList<>(sortedlottoNum);
+		return returnLottoNum.get(0)+", "+returnLottoNum.get(1)+", "+returnLottoNum.get(2)
+				+", "+returnLottoNum.get(3)+", "+returnLottoNum.get(4);
 	}
-	
 }
