@@ -11,7 +11,7 @@ import com.hyoni.crawling.common.vo.NaverAuthVO;
 @Repository("NaverAdsystemDao")
 public class NaverAdsystemDao {
 	private final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36";
-	public static NaverAuthVO naverAuthVO;
+	private NaverAuthVO naverAuthVO;
 	
 	public void getLoginToNaverAdSystem() throws Exception {
 		/*STEP1.NNB쿠키GET*/
@@ -52,5 +52,9 @@ public class NaverAdsystemDao {
 		
 		loginData = new JSONObject(loginToken);
 		naverAuthVO = new NaverAuthVO(cookieNNBResponse.cookie("NNB"), (String)loginData.get("token"));
+	}
+	
+	public NaverAuthVO getNaverAuth() {
+		return naverAuthVO;
 	}
 }

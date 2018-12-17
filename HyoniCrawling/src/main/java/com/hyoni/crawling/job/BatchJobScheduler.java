@@ -20,8 +20,8 @@ public class BatchJobScheduler {
 		logger.info("[BATCH : START] NaverAdsystem login Schedule");
 		naverAdsystemDao.getLoginToNaverAdSystem();
 		logger.info("[BATCH : END] NaverAdsystem login Schedule 1.NNB : "
-					+NaverAdsystemDao.naverAuthVO.getNnb()
-					+"2.TOKEN : "+NaverAdsystemDao.naverAuthVO.getToken());
+					+naverAdsystemDao.getNaverAuth().getNnb()
+					+"2.TOKEN : "+naverAdsystemDao.getNaverAuth().getToken());
 	}
 	
 	@Scheduled(cron="0 0 5 * * *")
