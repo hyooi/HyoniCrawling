@@ -1,6 +1,6 @@
 package com.hyoni.crawling.chatbot.vo;
 
-public class ChatRequestVO {
+public class ChatRequest {
 	private String user_key;
 	private String type;
 	private String content;

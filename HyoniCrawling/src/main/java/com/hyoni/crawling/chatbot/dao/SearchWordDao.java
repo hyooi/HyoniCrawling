@@ -17,6 +17,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hyoni.crawling.chatbot.vo.Keyword;
 import com.hyoni.crawling.common.dao.NaverAdsystemDao;
 
 @Repository("SearchWordDao")
@@ -36,6 +38,15 @@ public class SearchWordDao {
 	
 	@Autowired
 	private NaverAdsystemDao naverAdsystemDao;
+	
+	@Autowired
+	private KeywordDao keywordDao;
+	
+	@Test
+	public void saveKeyword() {
+		Keyword result = keywordDao.save(new Keyword("TEST2", 1000,500));
+		System.out.println(result);
+	}
 	
 	public void getTopRandomKeyword() throws Exception {
 		int[] month = {1,2,3,4,5,6,7,8,9,10,11,12};
