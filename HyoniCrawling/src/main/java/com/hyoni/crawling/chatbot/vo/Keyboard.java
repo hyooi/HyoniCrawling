@@ -1,9 +1,9 @@
 package com.hyoni.crawling.chatbot.vo;
 
-public class KeyboardVO {
+public class Keyboard {
 	private String type;
 	
-	public KeyboardVO() {
+	public Keyboard() {
 		this.type = "text";
 	}
 	

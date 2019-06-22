@@ -1,9 +1,9 @@
 package com.hyoni.crawling.chatbot.vo;
 
-public class MessageVO {
+public class Message {
 	private String text;
 
-	public MessageVO(String text) {
+	public Message(String text) {
 		this.text = text;
 	}
 
