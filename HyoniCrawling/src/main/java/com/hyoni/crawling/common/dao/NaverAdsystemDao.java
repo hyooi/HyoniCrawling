@@ -32,8 +32,8 @@ public class NaverAdsystemDao {
 		/*STEP2 네이버 로그인 처리 */
 		cookieUrl = "https://searchad.naver.com/auth/login";
 		JSONObject loginData = new JSONObject();
-		loginData.put("loginId", "hyoin123");
-		loginData.put("loginPwd", "service!nav");
+		loginData.put("loginId", "userid");
+		loginData.put("loginPwd", "userpwd");
 		
 		String loginToken = Jsoup.connect(cookieUrl)
                 .header("Accept", "application/json, text/plain, */*")
